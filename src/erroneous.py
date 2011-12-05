@@ -105,7 +105,6 @@ if __name__ == "__main__":
     for sectionName in config.sections():
         if sectionName != "main":
             try:
-                label = config.get(sectionName, 'label')
                 severity = config.get(sectionName, 'severity')
                 product = config.get(sectionName, 'product')
                 if severity != "security" and severity != "bugfix":
@@ -114,5 +113,5 @@ if __name__ == "__main__":
                 logging.warning("did not succeed in parsing config of part %s" % sectionName)
                 continue
             logging.info("starting part %s:  label: %s  severity: %s" % (sectionName, label, severity) )
-            checkAndCreateErrata(label, severity, product)
+            checkAndCreateErrata(sectionName, severity, product)
     client.auth.logout(key)
