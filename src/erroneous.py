@@ -112,6 +112,6 @@ if __name__ == "__main__":
             except:
                 logging.warning("did not succeed in parsing config of part %s" % sectionName)
                 continue
-            logging.info("starting part %s:  label: %s  severity: %s" % (sectionName, label, severity) )
+            logging.info("starting part %s:  label: %s  severity: %s" % (sectionName, sectionName, severity) )
             checkAndCreateErrata(sectionName, severity, product)
     client.auth.logout(key)
