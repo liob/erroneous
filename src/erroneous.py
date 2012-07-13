@@ -6,7 +6,6 @@ import logging
 import random
 import ConfigParser
 import xmlrpclib
-import hashlib
 
 config = ConfigParser.SafeConfigParser({'here': sys.path[0]})
 try:
@@ -42,13 +41,6 @@ def checkAndCreateErrata(channel, severity, product):
     packages = client.channel.software.listAllPackages(key, channel)
     for package in packages:
         errata_name = "%s-%s.%s" % (package["name"], package["version"], package["release"])
-        # a errata name must not exceed 128 chars. Otherwise it causes problems in spacewalk
-        if len(errata_name) > 127:
-            # name convention: (first 61 chars of package name)_(64 chars sha256 of errata_name)
-            logging.info("package %s exceeds 128 chars - using hash to shorten name")
-            sha256_hash = hashlib.sha256(errata_name).hexdigest()
-            errata_name = "%s_%s" % (package["name"][0:61], sha256_hash)
-        
         try:
             client.errata.listCves(key, errata_name)
             errata_exists = True
@@ -87,10 +79,10 @@ def checkAndCreateErrata(channel, severity, product):
             package["changelog"] = client.packages.listChangelog(key, package["id"]).split("*")
             errata_info = {}
             if severity == "security":
-                errata_info["synopsis"] = "Security update for %s - ErrataGenerator" % package["name"]
+                errata_info["synopsis"] = "Security update" % package["name"]
                 errata_info["advisory_type"] = "Security Advisory"
             elif severity == "bugfix":
-                errata_info["synopsis"] = "Enhancement update for %s" % package["name"]#
+                errata_info["synopsis"] = "Enhancement update" % package["name"]#
                 errata_info["advisory_type"] = "Bug Fix Advisory"
             errata_info["advisory_name"] = errata_name
             errata_info["advisory_release"] = random.randint(1, 9999)
