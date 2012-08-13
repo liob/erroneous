@@ -79,10 +79,10 @@ def checkAndCreateErrata(channel, severity, product):
             package["changelog"] = client.packages.listChangelog(key, package["id"]).split("*")
             errata_info = {}
             if severity == "security":
-                errata_info["synopsis"] = "Security update" % package["name"]
+                errata_info["synopsis"] = "Security update"
                 errata_info["advisory_type"] = "Security Advisory"
             elif severity == "bugfix":
-                errata_info["synopsis"] = "Enhancement update" % package["name"]#
+                errata_info["synopsis"] = "Enhancement update"
                 errata_info["advisory_type"] = "Bug Fix Advisory"
             errata_info["advisory_name"] = errata_name
             errata_info["advisory_release"] = random.randint(1, 9999)
