@@ -41,6 +41,7 @@ def checkAndCreateErrata(channel, severity, product):
     packages = client.channel.software.listAllPackages(key, channel)
     for package in packages:
         errata_name = "%s-%s.%s" % (package["name"], package["version"], package["release"])
+        errata_name = errata_name[:32] #max 32 chars allowed
         try:
             client.errata.listCves(key, errata_name)
             errata_exists = True
