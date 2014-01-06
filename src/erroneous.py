@@ -92,8 +92,11 @@ def checkAndCreateErrata(channel, severity, product):
             errata_info["description"] = package["changelog"][1].strip()
             errata_info["solution"] = "no solution"
             
-            logging.info("created errata %s for channel %s" % (errata_name, channel))
-            client.errata.create(key, errata_info, [], [], [package["id"],], True, [channel,])
+            try:
+                client.errata.create(key, errata_info, [], [], [package["id"],], True, [channel,])
+                logging.info("created errata %s for channel %s" % (errata_name, channel))
+            except:
+                logging.error("could not crate errata %s for channel %s" % (errata_name, channel))
             
         else:
             logging.error("could not process package  id: %i name: %s \nEXITING!" % (package["id"], package["name"]))
